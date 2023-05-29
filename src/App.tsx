@@ -1,5 +1,5 @@
 import "./App.css";
-import input from "../input.json";
+import first_input from "../input.json";
 
 function App() {
   // function toHoursAndMinutes(totalMinutes: number) {
@@ -12,10 +12,9 @@ function App() {
   // }
   function addMinutes(date: Date, minutes: number) {
     date.setMinutes(date.getMinutes() + minutes);
-  
+
     return date;
   }
-
 
   function endTime(start: string, duration: number) {
     const date1 = new Date(`01/01/1970 ${start}`);
@@ -23,37 +22,66 @@ function App() {
     const currentHour = newDate.getHours();
     const currentMinute = newDate.getMinutes();
 
-    return `${currentHour}:${currentMinute}`
-    
-
+    return `${currentHour < 10 ? "0" + currentHour : currentHour}:${
+      currentMinute == 0 ? currentMinute + "0" : currentMinute
+    }`;
   }
+
+  function ArrayFormater(
+    array: { id: number; start: string; duration: number }[]
+  ) {
+    const newArray = [];
+    for (let index = 0; index < array.length; index++) {
+      const element = array[index];
+      const newObject = {
+        id: element.id,
+        duration: element.duration,
+        start: element.start,
+        startPx: element.start.replace(":", "").toString() + "px",
+        height: (element.duration / 60) * 100,
+        end: endTime(element.start, element.duration),
+      };
+      newArray.push(newObject);
+    }
+
+    for (let index = 0; index < newArray.length; index++) {
+      let second_iterator = index + 1;
+      while (second_iterator < newArray.length) {
+        if (newArray[second_iterator].start < newArray[index].start) {
+          const temp: any = newArray[index];
+          newArray[index] = newArray[second_iterator];
+          newArray[second_iterator] = temp;
+        }
+        second_iterator++;
+      }
+    }
+    return newArray;
+  }
+
   // if inférieurer a end time du premier ils se chevauchent forcement
   return (
     <div style={{ height: "2400px", width: "100%" }}>
-      {input.map((list, index) => {
-        const newObject = {
-          id: list.id,
-          duration: list.duration,
-          start: list.start,
-          startPx: list.start.replace(":", "").toString() + "px",
-          height: (list.duration / 60) * 100,
-          end: endTime(list.start, list.duration)
-        };
+      {ArrayFormater(first_input).map((list, index, input) => {
+        // console.log(newObject.start < newObject.end[index - 1]);
 
-        console.log(newObject);
-
-        // console.log(index);
         // if (list.start < list.end[index -1]) {
 
-        if (list.start) {
+        if (
+          (input[index - 1] == undefined ? "" : input[index - 1].end) >=
+          list.start
+        ) {
+          console.log(input[index - 1].end, list.start);
+          console.log(input[index - 1].end > list.start);
+          console.log(input[index - 1].id, list.id);
           return (
             <div
               style={{
                 backgroundColor: "red",
-                position: "relative",
+                position: "absolute",
                 border: "1px solid",
-                top: newObject.startPx,
-                height: newObject.height,
+                width: "100%",
+                top: list.startPx,
+                height: list.height,
               }}
               key={list.id}
             >
