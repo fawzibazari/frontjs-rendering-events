@@ -10,18 +10,34 @@ function App() {
   // function padToTwoDigits(num: number) {
   //   return num.toString().padStart(2, "0");
   // }
+  function addMinutes(date: Date, minutes: number) {
+    date.setMinutes(date.getMinutes() + minutes);
+  
+    return date;
+  }
 
-  // function endTime(start: string, duration: number) {
 
-  // }
+  function endTime(start: string, duration: number) {
+    const date1 = new Date(`01/01/1970 ${start}`);
+    const newDate = addMinutes(date1, duration);
+    const currentHour = newDate.getHours();
+    const currentMinute = newDate.getMinutes();
+
+    return `${currentHour}:${currentMinute}`
+    
+
+  }
   // if inférieurer a end time du premier ils se chevauchent forcement
   return (
     <div style={{ height: "2400px", width: "100%" }}>
       {input.map((list, index) => {
         const newObject = {
-          start: list.start.replace(":", "").toString() + "px",
+          id: list.id,
+          duration: list.duration,
+          start: list.start,
+          startPx: list.start.replace(":", "").toString() + "px",
           height: (list.duration / 60) * 100,
-          // end
+          end: endTime(list.start, list.duration)
         };
 
         console.log(newObject);
@@ -36,7 +52,7 @@ function App() {
                 backgroundColor: "red",
                 position: "relative",
                 border: "1px solid",
-                top: newObject.start,
+                top: newObject.startPx,
                 height: newObject.height,
               }}
               key={list.id}
