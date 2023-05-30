@@ -2,14 +2,6 @@ import "./App.css";
 import first_input from "../input.json";
 
 function App() {
-  // function toHoursAndMinutes(totalMinutes: number) {
-  //   const hours = Math.floor(totalMinutes / 60);
-  //   const minutes = totalMinutes % 60;
-  //   return `${padToTwoDigits(hours)}:${padToTwoDigits(minutes)}`;
-  // }
-  // function padToTwoDigits(num: number) {
-  //   return num.toString().padStart(2, "0");
-  // }
   function addMinutes(date: Date, minutes: number) {
     date.setMinutes(date.getMinutes() + minutes);
 
@@ -58,10 +50,11 @@ function App() {
     return newArray;
   }
   function overlapping(elt1: any, elt2: any) {
-    console.log(elt1, elt2);
-
-    if (elt1.end >= elt2.start) {
-      console.log("here");
+    if (elt1 != 0) {
+      if (elt1.end >= elt2.start) {
+        console.log(elt1, elt2);
+        return true;
+      }
     }
   }
 
@@ -100,12 +93,12 @@ function App() {
         );
       })}
       {ArrayFormater(first_input).map((list, index, input) => {
-        if (
-          (input[index - 1] == undefined ? "" : input[index - 1].end) >=
-          list.start
-        ) {
+        const precedent = input[index - 1] != undefined ? input[index - 1] : 0;
+
+        const overlap = overlapping(precedent, list);
+        if (overlap == true) {
           return (
-            <div style={{}}>
+            <>
               <div
                 style={{
                   backgroundColor: "red",
@@ -119,21 +112,20 @@ function App() {
               >
                 {list.id}
               </div>
-
               <div
                 style={{
                   backgroundColor: "red",
                   position: "absolute",
                   border: "1px solid",
                   width: "50%",
-                  top: input[index - 1].startPx,
-                  height: input[index - 1].height,
+                  top: list.startPx,
+                  height: list.height,
                 }}
                 key={input[index - 1].id}
               >
                 {input[index - 1].id}
               </div>
-            </div>
+            </>
           );
         } else {
           // return (
