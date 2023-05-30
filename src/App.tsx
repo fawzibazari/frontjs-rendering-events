@@ -57,6 +57,13 @@ function App() {
     }
     return newArray;
   }
+  function overlapping(elt1: any, elt2: any) {
+    console.log(elt1, elt2);
+
+    if (elt1.end >= elt2.start) {
+      console.log("here");
+    }
+  }
 
   // if inférieurer a end time du premier ils se chevauchent forcement
   return (
@@ -97,40 +104,53 @@ function App() {
           (input[index - 1] == undefined ? "" : input[index - 1].end) >=
           list.start
         ) {
-          console.log(input[index - 1].end, list.start);
-          // console.log(input[index - 1].end >= list.start);
-          // console.log(input[index - 1].id, list.id);
           return (
-            <div
-              style={{
-                backgroundColor: "red",
-                position: "absolute",
-                border: "1px solid",
-                width: "100%",
-                top: list.startPx,
-                height: list.height,
-              }}
-              key={list.id}
-            >
-              {list.id}
+            <div style={{}}>
+              <div
+                style={{
+                  backgroundColor: "red",
+                  position: "absolute",
+                  border: "1px solid",
+                  width: "50%",
+                  top: list.startPx,
+                  height: list.height,
+                }}
+                key={list.id}
+              >
+                {list.id}
+              </div>
+
+              <div
+                style={{
+                  backgroundColor: "red",
+                  position: "absolute",
+                  border: "1px solid",
+                  width: "50%",
+                  top: input[index - 1].startPx,
+                  height: input[index - 1].height,
+                }}
+                key={input[index - 1].id}
+              >
+                {input[index - 1].id}
+              </div>
             </div>
           );
         } else {
-          return (
-            <div
-              style={{
-                backgroundColor: "red",
-                position: "absolute",
-                border: "1px solid",
-                width: "100%",
-                top: list.startPx,
-                height: list.height,
-              }}
-              key={list.id}
-            >
-              {list.id}
-            </div>
-          );
+          // return (
+          //   <div
+          //     style={{
+          //       backgroundColor: "red",
+          //       position: "absolute",
+          //       border: "1px solid",
+          //       width: "100%",
+          //       top: list.startPx,
+          //       height: list.height,
+          //     }}
+          //     key={list.id}
+          //   >
+          //     {list.id}
+          //   </div>
+          // );
         }
       })}
     </div>
