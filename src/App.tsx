@@ -52,12 +52,35 @@ function App() {
   function overlapping(elt1: any, elt2: any) {
     if (elt1 != 0) {
       if (elt1.end >= elt2.start) {
-        console.log(elt1.id, elt2.id);
+        // console.log(elt1.id, elt2.id);
 
         return true;
       }
     }
   }
+
+  function finalFormater(
+    array: { id: number; start: string; duration: number }[]
+  ) {
+    const arrayWithOverlap: any[] = [];
+
+    ArrayFormater(array).map((list, index, input) => {
+      const precedent = input[index - 1] != undefined ? input[index - 1] : 0;
+      const overlap = overlapping(precedent, list);
+      if (overlap == true) {
+        const found = arrayWithOverlap.some(
+          (el) => el.id == list.id || el.id == precedent.id
+        );
+        console.log(found);
+        if (found == false) {
+          arrayWithOverlap.push(precedent);
+          arrayWithOverlap.push(list);
+        }
+      }
+    });
+    return arrayWithOverlap
+  }
+  finalFormater();
 
   // if inférieurer a end time du premier ils se chevauchent forcement
   return (
@@ -99,66 +122,7 @@ function App() {
           </p>
         );
       })}
-      {ArrayFormater(first_input).map((list, index, input) => {
-        const precedent = input[index - 1] != undefined ? input[index - 1] : 0;
-        const overlap = overlapping(precedent, list);
-        if (overlap == true) {
-          return (
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                width: "100%",
-                position: "relative",
-              }}
-            >
-              <div
-                style={{
-                  backgroundColor: "red",
-                  border: "1px solid",
-                  position: "absolute",
-                  top: list.startPx,
-                  height: list.height,
-                  width: "50px",
-                }}
-                key={list.id}
-              >
-                {list.id}
-              </div>
-              <div
-                style={{
-                  backgroundColor: "red",
-                  border: "1px solid",
-                  position: "absolute",
-                  top: precedent.startPx,
-                  height: precedent.height,
-                  width: "50px",
-                  left: "90px"
-                }}
-                key={precedent.id}
-              >
-                {precedent.id}
-              </div>
-            </div>
-          );
-        } else {
-          // return (
-          //   <div
-          //     style={{
-          //       backgroundColor: "red",
-          //       position: "absolute",
-          //       border: "1px solid",
-          //       width: "100%",
-          //       top: list.startPx,
-          //       height: list.height,
-          //     }}
-          //     key={list.id}
-          //   >
-          //     {list.id}
-          //   </div>
-          // );
-        }
-      })}
+      {/* {} */}
     </div>
   );
 }
