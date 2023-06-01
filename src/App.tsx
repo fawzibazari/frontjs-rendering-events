@@ -1,7 +1,10 @@
 import "./App.css";
 import first_input from "../input.json";
+import { useState } from "react";
 
 function App() {
+  const [div, setDiv] = useState(false);
+
   function addMinutes(date: Date, minutes: number) {
     date.setMinutes(date.getMinutes() + minutes);
 
@@ -52,13 +55,10 @@ function App() {
   function overlapping(elt1: any, elt2: any) {
     if (elt1 != 0) {
       if (elt1.end >= elt2.start) {
-        // console.log(elt1.id, elt2.id);
-
         return true;
       }
     }
   }
-
   function finalFormater(
     array: { id: number; start: string; duration: number }[]
   ) {
@@ -68,20 +68,30 @@ function App() {
       const precedent = input[index - 1] != undefined ? input[index - 1] : 0;
       const overlap = overlapping(precedent, list);
       if (overlap == true) {
+        precedent["overlap"] = true;
+        list["overlap"] = true;
         const found = arrayWithOverlap.some(
           (el) => el.id == list.id || el.id == precedent.id
         );
-        console.log(found);
+        if (found == false) {
+          arrayWithOverlap.push(precedent);
+          arrayWithOverlap.push(list);
+        }
+      } else {
+        list["overlap"] = false;
+        const found = arrayWithOverlap.some(
+          (el) => el.id == list.id || el.id == precedent.id
+        );
         if (found == false) {
           arrayWithOverlap.push(precedent);
           arrayWithOverlap.push(list);
         }
       }
     });
-    return arrayWithOverlap
-  }
-  finalFormater();
+    console.log(arrayWithOverlap.length);
 
+    return arrayWithOverlap;
+  }
   // if inférieurer a end time du premier ils se chevauchent forcement
   return (
     <div
@@ -122,7 +132,72 @@ function App() {
           </p>
         );
       })}
-      {/* {} */}
+      {finalFormater(first_input).map((list, index, input) => {
+        if (list.overlap == true) {
+          return (
+            <div
+              style={{
+                backgroundColor: "aqua",
+                border: "1px solid",
+                position: "absolute",
+                top: list.startPx,
+                height: list.height,
+                width: "50px",
+              }}
+              key={list.id}
+            >
+              {list.id}
+            </div>
+          );
+        } else {
+          return (
+            <div
+              style={{
+                backgroundColor: "red",
+                border: "1px solid",
+                position: "absolute",
+                top: list.startPx,
+                height: list.height,
+                width: "50px",
+              }}
+              key={list.id}
+            >
+              {list.id}
+            </div>
+          );
+        }
+        // {
+        //   list.overlap == true ? (
+        //     <div
+        //       style={{
+        //         backgroundColor: "red",
+        //         border: "1px solid",
+        //         position: "absolute",
+        //         top: list.startPx,
+        //         height: list.height,
+        //         width: "50px",
+        //       }}
+        //       key={list.id}
+        //     >
+        //       {list.id}
+        //     </div>
+        //   ) : (
+        //     <div
+        //       style={{
+        //         backgroundColor: "red",
+        //         border: "1px solid",
+        //         position: "absolute",
+        //         top: list.startPx,
+        //         height: list.height,
+        //         width: "50px",
+        //       }}
+        //       key={list.id}
+        //     >
+        //       {list.id}
+        //     </div>
+        //   );
+        // }
+      })}
     </div>
   );
 }
