@@ -52,7 +52,8 @@ function App() {
   function overlapping(elt1: any, elt2: any) {
     if (elt1 != 0) {
       if (elt1.end >= elt2.start) {
-        console.log(elt1, elt2);
+        console.log(elt1.id, elt2.id);
+
         return true;
       }
     }
@@ -60,8 +61,14 @@ function App() {
 
   // if inférieurer a end time du premier ils se chevauchent forcement
   return (
-    <div style={{ height: "2400px", width: "100%" }}>
-      {[...Array(2401)].map((x, i) => {
+    <div
+      style={{
+        height: "2400px",
+        width: "100%",
+        position: "relative",
+      }}
+    >
+      {[...Array(2401)].map((_x, i) => {
         return (
           <p
             key={i}
@@ -94,19 +101,25 @@ function App() {
       })}
       {ArrayFormater(first_input).map((list, index, input) => {
         const precedent = input[index - 1] != undefined ? input[index - 1] : 0;
-
         const overlap = overlapping(precedent, list);
         if (overlap == true) {
           return (
-            <>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                width: "100%",
+                position: "relative",
+              }}
+            >
               <div
                 style={{
                   backgroundColor: "red",
-                  position: "absolute",
                   border: "1px solid",
-                  width: "50%",
+                  position: "absolute",
                   top: list.startPx,
                   height: list.height,
+                  width: "50px",
                 }}
                 key={list.id}
               >
@@ -115,17 +128,18 @@ function App() {
               <div
                 style={{
                   backgroundColor: "red",
-                  position: "absolute",
                   border: "1px solid",
-                  width: "50%",
-                  top: list.startPx,
-                  height: list.height,
+                  position: "absolute",
+                  top: precedent.startPx,
+                  height: precedent.height,
+                  width: "50px",
+                  left: "90px"
                 }}
-                key={input[index - 1].id}
+                key={precedent.id}
               >
-                {input[index - 1].id}
+                {precedent.id}
               </div>
-            </>
+            </div>
           );
         } else {
           // return (
