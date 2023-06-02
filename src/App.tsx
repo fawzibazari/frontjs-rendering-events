@@ -52,13 +52,17 @@ function App() {
     }
     return newArray;
   }
+
   function overlapping(elt1: any, elt2: any) {
     if (elt1 != 0) {
-      if (elt1.end >= elt2.start) {
+      if (elt1.end > elt2.start && elt2.start <elt1.end) {
+        console.log(elt1.id , elt2.id);
+        
         return true;
       }
     }
   }
+
   function finalFormater(
     array: { id: number; start: string; duration: number }[]
   ) {
@@ -88,7 +92,7 @@ function App() {
         }
       }
     });
-    console.log(arrayWithOverlap.length);
+    console.log(arrayWithOverlap);
 
     return arrayWithOverlap;
   }
@@ -143,6 +147,8 @@ function App() {
                 top: list.startPx,
                 height: list.height,
                 width: "50px",
+                marginLeft: "8%"
+
               }}
               key={list.id}
             >
@@ -159,6 +165,7 @@ function App() {
                 top: list.startPx,
                 height: list.height,
                 width: "50px",
+                marginLeft: "8%"
               }}
               key={list.id}
             >
