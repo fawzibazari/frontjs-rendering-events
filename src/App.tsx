@@ -1,10 +1,7 @@
 import "./App.css";
 import first_input from "../input.json";
-import { useState } from "react";
 
 function App() {
-  const [div, setDiv] = useState(false);
-
   function addMinutes(date: Date, minutes: number) {
     date.setMinutes(date.getMinutes() + minutes);
 
@@ -55,9 +52,9 @@ function App() {
 
   function overlapping(elt1: any, elt2: any) {
     if (elt1 != 0) {
-      if (elt1.end > elt2.start && elt2.start <elt1.end) {
-        console.log(elt1.id , elt2.id);
-        
+      if (elt1.end > elt2.start && elt2.start < elt1.end) {
+        // console.log(elt1.id, elt2.id);
+
         return true;
       }
     }
@@ -92,10 +89,30 @@ function App() {
         }
       }
     });
-    console.log(arrayWithOverlap);
-
     return arrayWithOverlap;
   }
+
+  // function newFormater(
+  //   array: { id: number; start: string; duration: number }[]
+  // ) {
+  //   const formatedArray = ArrayFormater(array);
+
+  //   for (let i = 0; i < formatedArray.length; i++) {
+  //     for (let k = 0; k < formatedArray.length; k++) {
+  //       if (!(formatedArray[i].id === formatedArray[k].id)) {
+  //         // console.log(formatedArray[i].id + " -> " + formatedArray[k].id);
+  //         if (formatedArray[i].end > formatedArray[k].start && formatedArray[k].start > formatedArray[i].end) {
+  //           console.log(formatedArray[i].id + " -> " + formatedArray[k].id);
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   return [];
+  // }
+
+  // newFormater(first_input)
+
   // if inférieurer a end time du premier ils se chevauchent forcement
   return (
     <div
@@ -130,12 +147,15 @@ function App() {
                   ? i
                   : i
               }px`,
+              marginBlockStart: "0px",
+              borderTop: "1px solid red",
             }}
           >
             {`${i}px`}
           </p>
         );
       })}
+
       {finalFormater(first_input).map((list, index, input) => {
         if (list.overlap == true) {
           return (
@@ -147,8 +167,7 @@ function App() {
                 top: list.startPx,
                 height: list.height,
                 width: "50px",
-                marginLeft: "8%"
-
+                marginLeft: "8%",
               }}
               key={list.id}
             >
@@ -165,7 +184,7 @@ function App() {
                 top: list.startPx,
                 height: list.height,
                 width: "50px",
-                marginLeft: "8%"
+                marginLeft: "8%",
               }}
               key={list.id}
             >
